@@ -149,7 +149,8 @@ def set_task_info(info, process_id):
     tasks[task_id].parentTaskId = int(info[5])
   elif log_type == 1:
     tasks[task_id].begin = timestamp
-    tasks[task_id].latency = tasks[task_id].begin - tasks[task_id].dispatch
+    if tasks[task_id].dispatch > 0:
+      tasks[task_id].latency = tasks[task_id].begin - tasks[task_id].dispatch
 
     thread_id = int(info[4])
     # For threads which aren't registered, they may have no name.
@@ -159,7 +160,8 @@ def set_task_info(info, process_id):
     tasks[task_id].threadName = threads[info[4]].name
   elif log_type == 2:
     tasks[task_id].end = timestamp
-    tasks[task_id].executionTime = tasks[task_id].end - tasks[task_id].begin
+    if tasks[task_id].begin > 0:
+      tasks[task_id].executionTime = tasks[task_id].end - tasks[task_id].begin
   elif log_type == 3:
     tasks[task_id].add_label(timestamp, info[3])
 
